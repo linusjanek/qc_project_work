@@ -1,26 +1,10 @@
 import math
 import numpy as np
-import quaternion as qt
 import random
 import itertools
 
-def cost_function(start_azel_deg, end_azel_deg):
-    # 1. Calculate quaternion from start azel
-    start_quaternion = qt.from_spherical_coords(np.deg2rad(start_azel_deg[0]), np.deg2rad(start_azel_deg[1]))
-    # 2. Calculate quaternion from end azel
-    end_quaternion = qt.from_spherical_coords(np.deg2rad(end_azel_deg[0]), np.deg2rad(end_azel_deg[1]))
-    # 3. Calculate relative quaternion
-    rel_quaternion = end_quaternion / start_quaternion
-    # 4. Calculate cost function considering shortest path
-    euler = qt.as_euler_angles(rel_quaternion)
-    euler = np.mod(euler + np.pi, 2 * np.pi) - np.pi  # Normalize to [-pi, pi]
-    cost = np.linalg.norm(euler)
-    return cost
-
 def cost_function_norm(start_azel_deg, end_azel_deg):
-    cost = cost_function(start_azel_deg, end_azel_deg)
-    cost_normalized = cost / cost_function([0, 0], [180, 180])
-    return cost_normalized
+    return np.arccos(np.sin(start_azel_deg[1] * np.pi / 180) * np.sin(end_azel_deg[1] * np.pi / 180) + np.cos(start_azel_deg[1] * np.pi / 180) * np.cos(end_azel_deg[1] * np.pi / 180) * np.cos((end_azel_deg[0] - start_azel_deg[0]) * np.pi / 180)) / np.pi
 
 def random_azel_dict(start_point, n):
     azel = {i+1:[random.randint(0, 360), random.randint(0, 360)] for i in range(n)}
@@ -69,7 +53,20 @@ def brute_force(azels, costs):
 
     return optimal_route, min_cost
 
-print(cost_function([0, 0], [180, 180]))
+point_list = [
+    [[0, 0], [0, 0]], 
+    [[0, 0], [0, 90]], 
+    [[0, 0], [90, 0]], 
+    [[0, 0], [90, 90]], 
+    [[0, 0], [180, 0]], 
+    [[0, 0], [180, 90]], 
+    [[0, 0], [270, 0]], 
+    [[0, 0], [270, 90]], 
+    [[0, 0], [360, 0]]
+    ]
+
+for p in point_list:
+    print(f"{cost_function_norm(p[0], p[1])} == {cost_function_norm(p[1], p[0])}")
 
 azel_start = np.array([0, 0])
 azels = random_azel_dict(azel_start, 9)
