@@ -20,6 +20,18 @@ def cost_dict(azel):
             cost[key_pair] = cost_function_norm(azel[keys[i]], azel[keys[j]])
     return cost
 
+def rnd_points(n: int) -> list[list[int]]:
+    return [[random.randint(0, 180), random.randint(0, 90)] for i in range(n)]
+
+def cost_matrix(azel: list[list[int]]):
+    m = np.zeros(shape=(len(azel), len(azel)))
+    for i in range(1, len(azel)):
+        for j in range(i):
+            cost = cost_function_norm(azel[i], azel[j])
+            m[i, j] = cost
+            m[j, i] = cost
+    return m
+
 # https://medium.com/@davidlfliang/intro-python-algorithms-traveling-salesman-problem-ffa61f0bd47b
 def route_cost(route, costs):
     total_cost = 0
@@ -52,6 +64,11 @@ def brute_force(azels, costs):
             optimal_route = perm
 
     return optimal_route, min_cost
+
+p = rnd_points(4)
+m = cost_matrix(p)
+print(m)
+exit()
 
 point_list = [
     [[0, 0], [0, 0]], 
