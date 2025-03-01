@@ -1,0 +1,26 @@
+import numpy as np
+import random
+
+# return the rotation angle
+def cost_function(start_azel_deg, end_azel_deg):
+    # convert to radians
+    start_azel = [deg * np.pi / 180 for deg in start_azel_deg]
+    end_azel = [deg * np.pi / 180 for deg in end_azel_deg]
+    return np.arccos(np.sin(start_azel[1]) * np.sin(end_azel[1]) + np.cos(start_azel[1]) * np.cos(end_azel[1]) * np.cos(end_azel[0] - start_azel[0]))
+
+def vector_from_azel(azel: list[int]) -> list[int]:
+    # convert to radians
+    azel = [deg * np.pi / 180 for deg in azel]
+    return [np.sin(azel[0]) * np.cos(azel[1]), np.cos(azel[0]) * np.cos(azel[1]), np.sin(azel[1])]
+
+def rnd_points(n: int) -> list[list[int]]:
+    return [[random.randint(0, 360), random.randint(0, 180)] for i in range(n)]
+
+def route_cost(route: list[list[int]]):
+    total_cost = 0
+    n = len(route)
+    for i in range(n):
+        current_azel = route[i]
+        next_azel = route[(i + 1) % n] # Wrap around to the start of the route
+        total_cost += cost_function(current_azel, next_azel)
+    return total_cost
