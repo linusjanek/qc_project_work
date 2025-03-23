@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 # return the rotation angle
-def cost_function(start_azel_deg, end_azel_deg):
+def cost_function(start_azel_deg, end_azel_deg) -> float:
     # convert to radians
     start_azel = [deg * np.pi / 180 for deg in start_azel_deg]
     end_azel = [deg * np.pi / 180 for deg in end_azel_deg]
@@ -16,7 +16,7 @@ def vector_from_azel(azel: list[int]) -> list[int]:
 def rnd_points(n: int) -> list[list[int]]:
     return [[random.randint(0, 360), random.randint(0, 180)] for i in range(n)]
 
-def route_cost(route: list[list[int]]):
+def route_cost(route: list[list[int]]) -> float:
     total_cost = 0
     n = len(route)
     for i in range(n):
