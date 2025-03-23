@@ -6,7 +6,7 @@ def cost_function(start_azel_deg, end_azel_deg) -> float:
     # convert to radians
     start_azel = [deg * np.pi / 180 for deg in start_azel_deg]
     end_azel = [deg * np.pi / 180 for deg in end_azel_deg]
-    return np.arccos(np.sin(start_azel[1]) * np.sin(end_azel[1]) + np.cos(start_azel[1]) * np.cos(end_azel[1]) * np.cos(end_azel[0] - start_azel[0]))
+    return np.arccos(np.sin(start_azel[1]) * np.sin(end_azel[1]) + np.cos(start_azel[1]) * np.cos(end_azel[1]) * np.cos(end_azel[0] - start_azel[0]))/np.pi
 
 def vector_from_azel(azel: list[int]) -> list[int]:
     # convert to radians
