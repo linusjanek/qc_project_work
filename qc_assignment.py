@@ -4,5 +4,5 @@ from quantum import quantum
 
 points = rnd_points(4)
 
-#print(brute_force(points))
+print(brute_force(points))
 print(quantum(points))

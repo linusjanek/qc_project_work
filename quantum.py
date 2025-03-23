@@ -2,6 +2,7 @@ import numpy as np
 from helper import cost_function
 import sympy as sp
 from dwave.samplers import SimulatedAnnealingSampler
+import pandas as pd
 
 def cost_matrix(azel: list[list[int]]):
     m = np.zeros(shape=(len(azel), len(azel)))
@@ -20,6 +21,47 @@ def epsilon_matrix(azel: list[list[int]]) -> np.ndarray:
             m[i, j] = cost
             m[j, i] = cost
     return m
+
+def verify_constraints(series: pd.Series) -> bool:
+    # Get dimensions
+    n = series.shape[0] - 2
+    n = int((1 + np.sqrt(1 + 4*n))/2)
+    # Verify that each city was just visited once
+    for i in range(n):
+        sum_row = 0
+        sum_col = 0
+        for j in range(n):
+            if i == j:
+                continue
+            sum_row += series.loc[f"p{i}_{j}"]
+            sum_col += series.loc[f"p{j}_{i}"]
+        if sum_row != 1 or sum_col != 1:
+            return False
+    # Verify that the entire route is connected
+    route = []
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            if int(series.loc[f"p{i}_{j}"]) == 1:
+                route.append(f"p{i}_{j}")
+                break
+    indeces = []
+    route_i = 0
+    while True:
+        mark = route[route_i].find("_")
+        this_i = int(route[route_i][1:mark])
+        next_i = int(route[route_i][mark+1:])
+        indeces.append(this_i)
+        if next_i in indeces:
+            break
+        for i, r in enumerate(route):
+            if r.startswith(f"p{next_i}_"):
+                route_i = i
+                break
+    if len(indeces) == n:
+        return indeces
+    return False
 
 # Returns list of indices of shortest route
 def quantum(azel: list[list[int]]) -> list[int]:
@@ -80,6 +122,9 @@ def quantum(azel: list[list[int]]) -> list[int]:
 
     # Now, send the QUBO to DWave
     sampler = SimulatedAnnealingSampler()
-    sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
-    print(sampleset)
-    return (0,0)
+    sampleset = sampler.sample_qubo(coeff, num_reads=5000).aggregate().to_pandas_dataframe()
+    sampleset.sort_values(by=["energy"])
+    for i, r in sampleset.iterrows():
+        v = verify_constraints(r)
+        if v != False:
+            return [azel[v_i] for v_i in v]
