@@ -122,9 +122,7 @@ def quantum(azel: list[list[int]]) -> list[int]:
 
     # Now, send the QUBO to DWave
     sampler = SimulatedAnnealingSampler()
-    sampleset = sampler.sample_qubo(coeff, num_reads=5000).aggregate().to_pandas_dataframe()
-    sampleset.sort_values(by=["energy"])
-
+    sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
     while True:
         min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
         v = verify_constraints(min.iloc[0])
