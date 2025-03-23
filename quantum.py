@@ -1,5 +1,5 @@
 import numpy as np
-from helper import cost_function
+from helper import cost_function, route_cost
 import sympy as sp
 from dwave.samplers import SimulatedAnnealingSampler
 import pandas as pd
@@ -124,7 +124,11 @@ def quantum(azel: list[list[int]]) -> list[int]:
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=5000).aggregate().to_pandas_dataframe()
     sampleset.sort_values(by=["energy"])
-    for i, r in sampleset.iterrows():
-        v = verify_constraints(r)
+
+    while True:
+        min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
+        v = verify_constraints(min.iloc[0])
         if v != False:
-            return [azel[v_i] for v_i in v]
+            route = [azel[v_i] for v_i in v]
+            return route, route_cost(route)
+        sampleset.drop(min.index[0], inplace=True)
