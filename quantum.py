@@ -97,6 +97,14 @@ def quantum(azel: list[list[int]]) -> list[int]:
             term += sp.symbols(f"p{j}_{i}")
         qubo_equation += (term-1)**2
         term = 0
+    # Imprint the third constraint: The route must be connected
+    for j in range(n):
+        for i in range(n):
+            if i == j:
+                continue
+            term += sp.symbols(f"p{j}_{i}")
+        qubo_equation += (term-1)**2
+        term = 0
     # Finally, the target: the sum of the paths shall be minimal
     for i in range(n):
         for j in range(n):
