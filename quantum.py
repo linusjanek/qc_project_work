@@ -97,14 +97,6 @@ def quantum(azel: list[list[int]]) -> list[int]:
             term += sp.symbols(f"p{j}_{i}")
         qubo_equation += (term-1)**2
         term = 0
-    # Imprint the third constraint: The route must be connected
-    for j in range(n):
-        for i in range(n):
-            if i == j:
-                continue
-            term += sp.symbols(f"p{j}_{i}")
-        qubo_equation += (term-1)**2
-        term = 0
     # Finally, the target: the sum of the paths shall be minimal
     for i in range(n):
         for j in range(n):
@@ -127,10 +119,110 @@ def quantum(azel: list[list[int]]) -> list[int]:
             key2 = key[index+1:]
             key = key[0:index]
         coeff[(key, key2)] += qubo_dict[oldkey]
+    
+    print(qubo_dict)
 
     # Now, send the QUBO to DWave
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
+    while True:
+        min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
+        v = verify_constraints(min.iloc[0])
+        if v != False:
+            route = [azel[v_i] for v_i in v]
+            return route, route_cost(route)
+        sampleset.drop(min.index[0], inplace=True)
+
+def qubo_linus(azel: list[list[int]]):
+    # costs is a square symmetrical n by n matrix, the diagonal is all zeros
+    costs = cost_matrix(azel)
+    # Get dimension
+    n = costs.shape[0]
+
+    variables = [f"p{v}_{j}" for v in range(n) for j in range(n)]
+
+    # We need a dict that maps all coefficients, initialize it with all zeros
+    coeff = {}
+    for i, v_i in enumerate(variables):
+        coeff[(v_i, v_i)] = 0
+        for v_j in variables[i:]:
+            coeff[(v_i, v_j)] = 0
+
+    # Helper term to make life easier
+    term = 0
+
+    # To initialize the QUBO according to [...], we define the Hamiltonian H = H_A + H_B
+    # Starting with H_A
+    hamiltonian_A = 0
+
+    # Every vertex must be visited exactly once
+    for v in range(n):
+        for j in range(n):
+            term += sp.symbols(f"p{v}_{j}")
+        hamiltonian_A += (1-term)**2
+        term = 0
+
+    # jth node in the cycle for each j
+    for j in range(n):
+        for v in range(n):
+            term += sp.symbols(f"p{v}_{j}")
+        hamiltonian_A += (1-term)**2
+        term = 0
+
+    # Penalty term for edges not in E meaning self loops
+    for v in range(n):
+        for j in range(n):
+            if j == n-1:
+                hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{0}")
+            else:
+                hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{j+1}")
+    
+    hamiltonian_B = 0
+
+    # Route cost
+    for u in range(n):
+        for v in range(n):
+            if u != v:
+                for j in range(n):
+                        if j == n-1:
+                            term += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{0}")
+                        else:
+                            term += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{j+1}")
+                hamiltonian_B += costs[u,v] * term
+                term = 0
+
+    A = 1
+    B = 1
+    qubo_equation = A * hamiltonian_A + B * hamiltonian_B
+
+    # Expand the equation and extract all coefficients
+    qubo_equation = sp.expand(qubo_equation)
+    qubo_dict = qubo_equation.as_coefficients_dict()
+    for key in qubo_dict:
+        oldkey = key
+        key = str(key)
+        if key == "1":
+            continue
+        if key.endswith("**2"):
+            key = key[:-3]
+        key2 = key
+        index = key.find("*")
+        if index != -1:
+            key2 = key[index+1:]
+            key = key[0:index]
+        if (key, key2) in coeff:
+            coeff[(key, key2)] += qubo_dict[oldkey]
+        else:
+            coeff[(key2, key)] += qubo_dict[oldkey]
+
+    return coeff
+
+def quantum_linus(azel: list[list[int]]) -> list[int]:
+    coeff = qubo_linus(azel)
+    # Now, send the QUBO to DWave
+    sampler = SimulatedAnnealingSampler()
+    sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
+    min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
     while True:
         min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
         v = verify_constraints(min.iloc[0])
