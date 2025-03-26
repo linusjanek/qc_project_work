@@ -184,14 +184,14 @@ def qubo_linus(azel: list[list[int]]):
         for v in range(n):
             if u != v:
                 for j in range(n):
-                        if j == n-1:
-                            term += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{0}")
-                        else:
-                            term += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{j+1}")
+                    if j == n-1:
+                        term += sp.symbols(f"p{u}_{j}") * sp.symbols(f"p{v}_{0}")
+                    else:
+                        term += sp.symbols(f"p{u}_{j}") * sp.symbols(f"p{v}_{j+1}")
                 hamiltonian_B += costs[u,v] * term
                 term = 0
 
-    A = 1
+    A = max(costs.flatten())
     B = 1
     qubo_equation = A * hamiltonian_A + B * hamiltonian_B
 
@@ -219,7 +219,6 @@ def qubo_linus(azel: list[list[int]]):
 
 def quantum_linus(azel: list[list[int]]) -> list[int]:
     coeff = qubo_linus(azel)
-    # Now, send the QUBO to DWave
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
     min = sampleset[sampleset["energy"] == sampleset["energy"].min()]

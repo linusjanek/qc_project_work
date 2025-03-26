@@ -4,7 +4,7 @@ from quantum import quantum, quantum_linus
 
 total_attempts = 10
 correct = 0
-targets = 4
+targets = 5
 for i in range(total_attempts):
     points = rnd_points(targets)
     rb, cb = brute_force(points)
