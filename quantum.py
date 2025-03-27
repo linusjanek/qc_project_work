@@ -217,15 +217,61 @@ def qubo_linus(azel: list[list[int]]):
 
     return coeff
 
+def verify_constraints_linus(series: pd.Series) -> bool:
+    # Get dimensions
+    n = series.shape[0] - 2
+    n = int((1 + np.sqrt(1 + 4*n))/2)
+    # Verify that each city was just visited once
+    for v in range(n):
+        sum_row = 0
+        sum_col = 0
+        for j in range(n):
+            # if i == j:
+                # continue
+            sum_row += series.loc[f"p{v}_{j}"]
+            sum_col += series.loc[f"p{v}_{j}"]
+        if sum_row != 1 or sum_col != 1:
+            return False
+    # Create list of edges from list of vertices
+    route = []
+    for j in range(n):
+        for v in range(n):
+            if int(series.loc[f"p{v}_{j}"]) == 1:
+                if j == 0:
+                    prev_vertex = v
+                    init_vertex = v
+                else:
+                    route.append(f"p{prev_vertex}_{v}")
+                    prev_vertex = v
+                    if j == n-1:
+                        route.append(f"p{v}_{init_vertex}")
+                break
+    indeces = []
+    route_i = 0
+    while True:
+        mark = route[route_i].find("_")
+        this_i = int(route[route_i][1:mark])
+        next_i = int(route[route_i][mark+1:])
+        indeces.append(this_i)
+        if next_i in indeces:
+            break
+        for i, r in enumerate(route):
+            if r.startswith(f"p{next_i}_"):
+                route_i = i
+                break
+    if len(indeces) == n:
+        return indeces
+    return False
+
 def quantum_linus(azel: list[list[int]]) -> list[int]:
     coeff = qubo_linus(azel)
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
     min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
-    while True:
-        min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
-        v = verify_constraints(min.iloc[0])
-        if v != False:
-            route = [azel[v_i] for v_i in v]
-            return route, route_cost(route)
-        sampleset.drop(min.index[0], inplace=True)
+    v = verify_constraints_linus(min.iloc[0])
+    if v != False:
+        route = [azel[v_i] for v_i in v]
+        return route, route_cost(route)
+    return False
+
+    
