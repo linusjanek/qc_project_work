@@ -26,5 +26,8 @@
     <ClInclude Include="Route.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

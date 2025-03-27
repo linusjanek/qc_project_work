@@ -6,6 +6,7 @@
 #include <math.h>
 #include "Azel.h"
 #include "Route.h"
+#include "Timer.h"
 
 Route brute_force(std::vector<Azel> points)
 {
@@ -25,11 +26,14 @@ int main()
 	std::uniform_real_distribution<> azimuths(0, 360);
 	std::uniform_real_distribution<> elevations(0, 180);
 	std::vector<Azel> points;
-	for (size_t i = 0; i < 13; i++)
+	for (size_t i = 0; i < 11; i++)
 	{
 		points.emplace_back((int)azimuths(gen), (int)elevations(gen));
 	}
+	Timer timer;
+	timer.start();
 	auto optimal = brute_force(points);
-	std::cout << optimal.print() << " Cost: " << optimal.route_cost();
+	timer.stop();
+	std::cout << "Optimal Route: " << optimal.print() << "\nCost: " << optimal.route_cost() << "\nTime taken: " << timer << "s" << std::endl;
 	return 0;
 }
