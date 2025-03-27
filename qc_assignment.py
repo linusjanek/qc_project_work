@@ -4,7 +4,7 @@ from quantum import quantum
 
 total_attempts = 10
 correct = 0
-targets = 7
+targets = 4
 for i in range(total_attempts):
     points = rnd_points(targets)
     rb, cb = brute_force(points)
