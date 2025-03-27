@@ -16,6 +16,9 @@ def vector_from_azel(azel: list[int]) -> list[int]:
 def rnd_points(n: int) -> list[list[int]]:
     return [[random.randint(0, 360), random.randint(0, 180)] for i in range(n)]
 
+def deterministic_points(n: int) -> list[list[int]]:
+    random.seed(a=10*n)
+    return [[random.randint(0, 360), random.randint(0, 180)] for i in range(n)]   
 def route_cost(route: list[list[int]]) -> float:
     total_cost = 0
     n = len(route)
