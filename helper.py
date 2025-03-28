@@ -14,7 +14,7 @@ def vector_from_azel(azel: list[int]) -> list[int]:
     return [np.sin(azel[0]) * np.cos(azel[1]), np.cos(azel[0]) * np.cos(azel[1]), np.sin(azel[1])]
 
 def rnd_points(n: int) -> list[list[int]]:
-    return [[random.randint(0, 360), random.randint(0, 180)] for i in range(n)]
+    return [[random.randint(0, 360), random.randint(-90, 90)] for i in range(n)]
 
 def route_cost(route: list[list[int]]) -> float:
     total_cost = 0
