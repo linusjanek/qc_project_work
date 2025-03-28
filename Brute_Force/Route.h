@@ -34,6 +34,18 @@ public:
 		}
 		return out.str();
 	}
+	std::string printJSON() const
+	{
+		std::stringstream out;
+		out << "\t{\n\t\t\"points\": [\n";
+		for (const auto& p : points)
+		{
+			out << "\t\t\t[\n\t\t\t\t" << p.az_deg << ",\n\t\t\t\t" << p.el_deg << "\n\t\t\t],\n";
+		}
+		out.seekp(-2, std::ios_base::end);
+		out << "\n\t\t],\n\t\t\"cost\": " << cost << "\n\t},\n";
+		return out.str();
+	}
 private:
 	std::vector<Azel> points;
 	double cost = 0;

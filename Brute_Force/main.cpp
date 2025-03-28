@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <random>
 #include <math.h>
+#include <fstream>
+#include <filesystem>
 #include "Azel.h"
 #include "Route.h"
 #include "Timer.h"
@@ -26,23 +28,36 @@ int main()
 	std::uniform_real_distribution<> elevations(-90, 90);
 
 	const size_t attempts = 10;
-	const size_t targets = 11;
+	const size_t max_targets = 12;
 
-	std::cout << "Calculating " << (size_t)(tgamma(targets + 1) / 2.0) << " permutations for each attempt (" << targets << " targets)." << std::endl;
-	std::cout << "  Nr  | Time taken [s] |   Cost   | Optimal Route" << std::endl;
-
-	for (size_t j = 0; j < attempts; j++)
+	for (size_t targets = 4; targets < max_targets + 1; targets++)
 	{
-		std::vector<Azel> points;
-		for (size_t i = 0; i < targets; i++)
+		const std::string fileName = "out/output" + std::to_string(targets) + ".json";
+
+		std::cout << "Calculating " << (size_t)(tgamma(targets + 1) / 2.0) << " permutations for each attempt (" << targets << " targets)." << std::endl;
+		std::cout << "  Nr  | Time taken [s] |   Cost   | Optimal Route" << std::endl;
+
+		std::stringstream json;
+		json << "[\n";
+		for (size_t j = 0; j < attempts; j++)
 		{
-			points.emplace_back((int)azimuths(gen), (int)elevations(gen));
+			std::vector<Azel> points;
+			for (size_t i = 0; i < targets; i++)
+			{
+				points.emplace_back((int)azimuths(gen), (int)elevations(gen));
+			}
+			Timer timer;
+			timer.start();
+			auto optimal = brute_force(points);
+			timer.stop();
+			std::cout << std::setw(5) << j + 1 << " | " << std::setw(14) << timer << " | " << std::fixed << std::setprecision(6) << optimal.route_cost() << " | " << optimal.print() << std::endl;
+			json << optimal.printJSON();
 		}
-		Timer timer;
-		timer.start();
-		auto optimal = brute_force(points);
-		timer.stop();
-		std::cout << std::setw(5) << j+1 << " | " << std::setw(14) << timer << " | " << std::fixed << std::setprecision(6) << optimal.route_cost() << " | " << optimal.print() << std::endl;
+		json.seekp(-2, std::ios_base::end);
+		json << "\n]";
+		std::ofstream file(fileName);
+		std::string json_str = json.str();
+		file << json_str;
 	}
 	return 0;
 }
