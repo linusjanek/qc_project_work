@@ -16,12 +16,13 @@ for targets in range(4, 13):
         input_data = json.load(input_file)
 
     print(input_data)
+    correct = 0
     for i in range(len(input_data)):
         #points = rnd_points(targets)
         #rb, cb = brute_force(points)
         points = input_data[i]["points"]
         cb = input_data[i]["cost"]
-        rq, cq = quantum_linus(points)
+        rq, cq = quantum(points)
         str = f"Attempt {i+1}/{len(input_data)}: cb == {round(cb, 4)}, cq == {round(cq, 4)} -> "
         if abs(cb-cq) < 0.0001:
             correct += 1

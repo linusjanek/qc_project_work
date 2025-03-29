@@ -127,12 +127,13 @@ def quantum(azel: list[list[int]]) -> list[int]:
             key2 = key[index+1:]
             key = key[0:index]
         coeff[(key, key2)] += qubo_dict[oldkey]
-    
-    print(qubo_dict)
 
     # Now, send the QUBO to DWave
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
+    sampleset["valid"] = False
+    for i in range(sampleset.shape[0]):
+        sampleset["valid"].iloc[i] = (verify_constraints(sampleset.iloc[i]) != False)
     while True:
         min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
         v = verify_constraints(min.iloc[0])
@@ -178,12 +179,12 @@ def qubo_linus(azel: list[list[int]]):
         term = 0
 
     # Penalty term for edges not in E meaning self loops
-    for v in range(n):
-        for j in range(n):
-            if j == n-1:
-                hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{0}")
-            else:
-                hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{j+1}")
+    # for v in range(n):
+    #     for j in range(n):
+    #         if j == n-1:
+    #             hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{0}")
+    #         else:
+    #             hamiltonian_A += sp.symbols(f"p{v}_{j}") * sp.symbols(f"p{v}_{j+1}")
     
     hamiltonian_B = 0
 
