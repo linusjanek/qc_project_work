@@ -97,6 +97,13 @@ def quantum(azel: list[list[int]]) -> list[int]:
             term += sp.symbols(f"p{j}_{i}")
         qubo_equation += (term-1)**2
         term = 0
+    # Imprint the third constraint: Route must visit all cities (no subsycles can be build). (Only implemented for subsycle of 2)
+    for i in range(n-1):
+        for j in range(i+1,n):
+            term = sp.symbols(f"p{i}_{j}")
+            term *=sp.symbols(f"p{j}_{i}")
+            qubo_equation += term
+            term = 0
     # Finally, the target: the sum of the paths shall be minimal
     for i in range(n):
         for j in range(n):
@@ -104,6 +111,7 @@ def quantum(azel: list[list[int]]) -> list[int]:
                 continue
             qubo_equation += costs[i,j] * sp.symbols(f"p{i}_{j}")
     # Expand the equation and extract all coefficients
+    #print(qubo_equation)
     qubo_equation = sp.expand(qubo_equation)
     qubo_dict = qubo_equation.as_coefficients_dict()
     for key in qubo_dict:
