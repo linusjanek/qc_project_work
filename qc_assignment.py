@@ -1,6 +1,6 @@
 from helper import rnd_points
 from brute_force import brute_force
-from quantum import quantum, quantum_linus
+from quantum import quantum, quantum_linus, basin_hopping_tsp
 import json
 from datetime import datetime
 
@@ -22,7 +22,7 @@ for targets in range(4, 13):
         #rb, cb = brute_force(points)
         points = input_data[i]["points"]
         cb = input_data[i]["cost"]
-        rq, cq = quantum(points)
+        rq, cq = quantum_linus(points)
         str = f"Attempt {i+1}/{len(input_data)}: cb == {round(cb, 4)}, cq == {round(cq, 4)} -> "
         if abs(cb-cq) < 0.0001:
             correct += 1

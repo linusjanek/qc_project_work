@@ -1,6 +1,8 @@
 import numpy as np
 from helper import cost_function, route_cost
 import sympy as sp
+from sympy import lambdify
+from scipy.optimize import basinhopping
 from dwave.samplers import SimulatedAnnealingSampler
 import pandas as pd
 
@@ -142,7 +144,7 @@ def quantum(azel: list[list[int]]) -> list[int]:
             return route, route_cost(route)
         sampleset.drop(min.index[0], inplace=True)
 
-def qubo_linus(azel: list[list[int]]):
+def qubo_linus(azel: list[list[int]], function = False):
     # costs is a square symmetrical n by n matrix, the diagonal is all zeros
     costs = cost_matrix(azel)
     # Get dimension
@@ -203,6 +205,9 @@ def qubo_linus(azel: list[list[int]]):
     A = max(costs.flatten())
     B = 1
     qubo_equation = A * hamiltonian_A + B * hamiltonian_B
+
+    if function:
+        return qubo_equation
 
     # Expand the equation and extract all coefficients
     qubo_equation = sp.expand(qubo_equation)
@@ -283,4 +288,17 @@ def quantum_linus(azel: list[list[int]]) -> list[int]:
         return route, route_cost(route)
     return False
 
-    
+#TODO this doesn't work for some reason
+def basin_hopping_tsp(azel: list[list[int]]) -> list[int]:
+    function = qubo_linus(azel, function=True)
+    # Convert to lambda function
+    f = lambdify([*function.free_symbols], function, 'numpy')
+    # Create x0 with all zeros
+    print(function.free_symbols)
+    x0 = np.zeros(len(function.free_symbols))
+    print(f(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0))
+    minimizer_kwargs = {"method": "BFGS"}
+    ret = basinhopping(function, x0, minimizer_kwargs=minimizer_kwargs,niter=200)
+
+    # the global minimum is:
+    ret.x, ret.fun
