@@ -144,7 +144,7 @@ def quantum(azel: list[list[int]]) -> list[int]:
             return route, route_cost(route)
         sampleset.drop(min.index[0], inplace=True)
 
-def qubo_linus(azel: list[list[int]], function = False):
+def qubo_linus(azel: list[list[int]], subgroup_indices: list[int] = [], function = False):
     # costs is a square symmetrical n by n matrix, the diagonal is all zeros
     costs = cost_matrix(azel)
     # Get dimension
@@ -179,6 +179,21 @@ def qubo_linus(azel: list[list[int]], function = False):
             term += sp.symbols(f"p{v}_{j}")
         hamiltonian_A += (1-term)**2
         term = 0
+    
+    # Penalty term for edges not being ordered correctly
+    this_index = 0
+    for i in range(len(subgroup_indices)):
+        next_index = this_index + subgroup_indices[i]
+        print(this_index)
+        print(next_index)
+        for v in range(this_index, next_index):
+            for j in range(n):
+                if j < this_index or j >= next_index:
+                    term += sp.symbols(f"p{v}_{j}")
+        this_index = next_index
+            
+    hamiltonian_A += term
+    term = 0
 
     # Penalty term for edges not in E meaning self loops
     # for v in range(n):
@@ -277,8 +292,8 @@ def verify_constraints_linus(series: pd.Series) -> bool:
         return indeces
     return False
 
-def quantum_linus(azel: list[list[int]]) -> list[int]:
-    coeff = qubo_linus(azel)
+def quantum_linus(azel: list[list[int]], subgroup_indices) -> list[int]:
+    coeff = qubo_linus(azel, subgroup_indices)
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
     min = sampleset[sampleset["energy"] == sampleset["energy"].min()]

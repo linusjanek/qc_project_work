@@ -1,0 +1,18 @@
+import sympy as sp
+
+n = 4
+subgroup_indices = [2,2]
+
+term = 0
+this_index = 0
+for i in range(len(subgroup_indices)):
+    next_index = this_index + subgroup_indices[i]
+    print(this_index)
+    print(next_index)
+    for v in range(this_index, next_index):
+        for j in range(n):
+            if j < this_index or j >= next_index:
+                term += sp.symbols(f"p{v}_{j}")
+    this_index = next_index
+
+print(term)
