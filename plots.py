@@ -98,3 +98,39 @@ for num_iterations in [20, 40, 80, 100, 150, 200, 1000]:
 plt.savefig(f'./out/runtime_iterations.png')
 
 # Plot runtime compared to brute forced solution
+iterator_path = f'./out/num_iterations_mixed.json'
+with open(iterator_path) as input_file:
+    # Load the JSON data into a Python dictionary
+    input_data = json.load(input_file)
+    # Extract the data for plotting
+    x = []
+    y = []
+    for i in range(len(input_data)):
+        x.append(input_data[i]["id"])
+        y.append(input_data[i]["average_runtime"])
+    # plot the data
+    plt.plot(x, y, label=f'Runtime vs brute force')
+    plt.xlabel('Number of vertices')
+    plt.ylabel('Average Runtime (s)')
+    plt.title('Runtime vs number of vertices, sample size n=50')
+    plt.legend()
+    plt.grid()
+
+
+for targets in range():
+    x = []
+    y = []
+    with open(f"Brute_Force/out/output{targets}.json") as input_file:
+        input_data = json.load(input_file)
+        # Extract the data for plotting
+        x.append(input_data[targets]["id"])
+        y_i = []
+        for i in range(len(input_data)):
+            y_i.append(input_data[i]["average_runtime"])
+        y.append(y_i/len(input_data))
+    plt.plot(x, y, label=f'Runtime vs brute force')
+    plt.xlabel('Number of vertices')
+    plt.ylabel('Average Runtime (s)')
+    plt.title('Runtime vs number of vertices, sample size n=50')
+    plt.legend()
+    plt.grid()
