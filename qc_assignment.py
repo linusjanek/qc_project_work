@@ -31,9 +31,8 @@ while correct:
         correct = False
 num_iterations = num_iterations * 2'
 '''
-iterations_for_vertices = [80, 80, 80, 80, 150, 1000, 10000, ]
-for num_iterations in [20, 40, 80, 100, 150, 200, 1000]:
-    iterator_path = f'./out/num_iterations_{num_iterations}.json'
+for num_iterations in [80, 150, 200, 500, 1000, 2000, 5000, 10000]:
+    iterator_path = f'./out/num_iterations_rt_{num_iterations}.json'
     iterator_data = []
     for targets in range(4, 12):
         for subgroup_size in range(1):
