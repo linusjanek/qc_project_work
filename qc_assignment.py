@@ -31,10 +31,11 @@ while correct:
         correct = False
 num_iterations = num_iterations * 2'
 '''
-for num_iterations in [80]:
+iterations_for_vertices = [80, 80, 80, 80, 150, 1000, 10000, ]
+for num_iterations in [20, 40, 80, 100, 150, 200, 1000]:
     iterator_path = f'./out/num_iterations_{num_iterations}.json'
     iterator_data = []
-    for targets in range(9, 10):
+    for targets in range(4, 12):
         for subgroup_size in range(1):
         # for subgroup_size in range(2, 5):
             # Load targets from C++ JSON output
@@ -49,7 +50,7 @@ for num_iterations in [80]:
             print(input_data)
             correct = 0
             total_runtime = 0
-            n_points = int(len(input_data)/2)
+            n_points = int(len(input_data))
             for i in range(n_points):
                 #points = rnd_points(targets)
                 #rb, cb = brute_force(points)
