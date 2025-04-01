@@ -6,6 +6,7 @@
 #include <math.h>
 #include <fstream>
 #include <filesystem>
+#include <numeric>
 #include "Azel.h"
 #include "Route.h"
 #include "Timer.h"
@@ -19,44 +20,24 @@ Route brute_force(std::vector<Azel> points)
 	} while (std::next_permutation(points.begin(), points.end()));
 	return minimal;
 }
-Route brute_force_advanced_planning(std::vector<Azel> points, std::vector<int> subgroup_indices){
-	std::vector<int> numbers(points.size());
-	for (size_t i = 0; i < points.size(); i++)
-	{
-		numbers[i] = i;
-	}
+
+Route brute_force_advanced_planning(std::vector<Azel> points, std::vector<int> subgroup_indices, size_t index = 0)
+{
 	Route minimal(points);
-
-	do {
-		// Check if the current permutation of numbers is valid for the subgroup indices
-		bool valid = true;
-		int subgroup_maxsize = 0;
-		int prevsubgroup_maxsize = 0;
-		for (size_t i = 0; i < subgroup_indices.size(); i++)
-		{
-			subgroup_maxsize += subgroup_indices[i];
-			for (size_t j = prevsubgroup_maxsize; j < subgroup_maxsize; j++)
-			{
-				if (numbers[j] > subgroup_maxsize-1){
-					valid = false;
-					break;
-				}
-			}
-			if(valid == false) break;
-			prevsubgroup_maxsize = subgroup_maxsize;
-		}
-
-		if(valid){
-			std::vector<Azel> next_points;
-			for (size_t i = 0; i < numbers.size(); i++) {
-				next_points.emplace_back(points[numbers[i]]);
-			}
-			Route next(next_points);
+	if (index == subgroup_indices.size() - 1)
+	{
+		do {
+			Route next(points);
 			if (next.route_cost() < minimal.route_cost()) minimal = next;
-		}
-	} while (std::next_permutation(numbers.begin(), numbers.end()));
+		} while (std::next_permutation(points.end() - subgroup_indices.back(), points.end()));
+		return minimal;
+	}
+	const auto start_idx = std::accumulate(subgroup_indices.begin(), subgroup_indices.begin() + index, 0);
+	do {
+		Route next = brute_force_advanced_planning(points, subgroup_indices, index + 1);
+		if (next.route_cost() < minimal.route_cost()) minimal = next;
+	} while (std::next_permutation(points.begin() + start_idx, points.begin() + start_idx + subgroup_indices.at(index)));
 	return minimal;
-
 }
 
 void EvaluateBruteForce()
@@ -66,10 +47,10 @@ void EvaluateBruteForce()
 	std::uniform_real_distribution<> azimuths(0, 360);
 	std::uniform_real_distribution<> elevations(-90, 90);
 
-	const size_t attempts = 1;
-	const size_t max_targets = 20;
+	const size_t attempts = 100;
+	const size_t max_targets = 12;
 
-	for (size_t targets = 20; targets < max_targets + 1; targets++)
+	for (size_t targets = 4; targets < max_targets + 1; targets++)
 	{
 		const std::string fileName = "out/output" + std::to_string(targets) + ".json";
 
@@ -107,12 +88,12 @@ void EvaluateBruteForceAdvanced()
 	std::uniform_real_distribution<> azimuths(0, 360);
 	std::uniform_real_distribution<> elevations(-90, 90);
 
-	const size_t attempts = 10;
-	const size_t max_targets = 10;
+	const size_t attempts = 100;
+	const size_t max_targets = 11;
 	const size_t max_subgroup_size = 10;
 
-	for (size_t targets = 10; targets < max_targets + 1; targets++) {
-		for (size_t subgroup_size = 6; subgroup_size <= max_subgroup_size; subgroup_size++) {
+	for (size_t targets = 4; targets < max_targets + 1; targets++) {
+		for (size_t subgroup_size = 2; subgroup_size <= max_subgroup_size && subgroup_size <= targets; subgroup_size++) {
 
 			const std::string fileName = "out/output" + std::to_string(targets) + "_" + std::to_string(subgroup_size) + ".json";
 
@@ -157,6 +138,6 @@ void EvaluateBruteForceAdvanced()
 
 int main()
 {
-	EvaluateBruteForce();
+	EvaluateBruteForceAdvanced();
 	return 0;
 }
