@@ -31,10 +31,10 @@ while correct:
         correct = False
 num_iterations = num_iterations * 2'
 '''
-for num_iterations in [1000]:
+for num_iterations in [80]:
     iterator_path = f'./out/num_iterations_{num_iterations}.json'
     iterator_data = []
-    for targets in range(11, 12):
+    for targets in range(9, 10):
         for subgroup_size in range(1):
         # for subgroup_size in range(2, 5):
             # Load targets from C++ JSON output

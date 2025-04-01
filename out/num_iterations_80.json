@@ -37,9 +37,9 @@
     {
         "id": "9.0",
         "num_iterations": 80,
-        "correct": 52,
-        "total": 100,
-        "average_runtime": 1.5893966412544251
+        "correct": 25,
+        "total": 50,
+        "average_runtime": 1.175437560081482
     },
     {
         "id": "10.0",
