@@ -1,128 +1,58 @@
 [
     {
-        "id": "4.2",
+        "id": "4.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 99,
+        "total": 100,
+        "average_runtime": 0.06948303461074828
     },
     {
-        "id": "4.3",
+        "id": "5.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 97,
+        "total": 100,
+        "average_runtime": 0.13706999778747558
     },
     {
-        "id": "4.4",
+        "id": "6.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 99,
+        "total": 100,
+        "average_runtime": 0.25900927543640134
     },
     {
-        "id": "5.2",
+        "id": "7.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 97,
+        "total": 100,
+        "average_runtime": 0.45846646308898925
     },
     {
-        "id": "5.3",
+        "id": "8.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 90,
+        "total": 100,
+        "average_runtime": 0.7743881607055664
     },
     {
-        "id": "5.4",
+        "id": "9.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 59,
+        "total": 100,
+        "average_runtime": 1.184815275669098
     },
     {
-        "id": "6.2",
+        "id": "10.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 20,
+        "total": 100,
+        "average_runtime": 1.6534275531768798
     },
     {
-        "id": "6.3",
+        "id": "11.0",
         "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "6.4",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "7.2",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "7.3",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "7.4",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "8.2",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "8.3",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "8.4",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "9.2",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "9.3",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "9.4",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "10.2",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "10.3",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
-    },
-    {
-        "id": "10.4",
-        "num_iterations": 100,
-        "correct": 10,
-        "total": 10
+        "correct": 2,
+        "total": 10,
+        "average_runtime": 2.1757046699523928
     }
 ]

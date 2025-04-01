@@ -31,10 +31,10 @@ while correct:
         correct = False
 num_iterations = num_iterations * 2'
 '''
-for num_iterations in [20, 40, 80]:
+for num_iterations in [1000]:
     iterator_path = f'./out/num_iterations_{num_iterations}.json'
     iterator_data = []
-    for targets in range(4, 12):
+    for targets in range(11, 12):
         for subgroup_size in range(1):
         # for subgroup_size in range(2, 5):
             # Load targets from C++ JSON output
@@ -48,7 +48,9 @@ for num_iterations in [20, 40, 80]:
 
             print(input_data)
             correct = 0
-            for i in range(len(input_data)):
+            total_runtime = 0
+            n_points = int(len(input_data)/2)
+            for i in range(n_points):
                 #points = rnd_points(targets)
                 #rb, cb = brute_force(points)
                 #points = input_data[i]["points"]
@@ -62,9 +64,11 @@ for num_iterations in [20, 40, 80]:
                 end_time = time()  # End the timer
 
                 runtime = end_time - start_time  # Calculate runtime
+                total_runtime += runtime  # Accumulate runtime
+
                 print(f"Runtime: {runtime:.4f} seconds")  # Print runtime
                 print(rq)
-                str = f"Attempt {i+1}/{len(input_data)}: cb == {round(cb, 4)}, cq == {round(cq, 4)} -> "
+                str = f"Attempt {i+1}/{n_points}: cb == {round(cb, 4)}, cq == {round(cq, 4)} -> "
                 if abs(cb-cq) < 0.0001:
                     correct += 1
                     str += "correct!"
@@ -101,7 +105,8 @@ for num_iterations in [20, 40, 80]:
             new_data['id'] = f'{targets}.{subgroup_size}'
             new_data['num_iterations'] = num_iterations
             new_data['correct'] = correct
-            new_data['total'] = len(input_data)
+            new_data['total'] = n_points
+            new_data['average_runtime'] = total_runtime/n_points
 
             iterator_data.append(new_data)   
             with open(iterator_path, 'w') as file:
