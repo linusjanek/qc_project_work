@@ -26,11 +26,12 @@ Route brute_force_advanced_planning(std::vector<Azel> points, std::vector<int> s
 		numbers[i] = i;
 	}
 	Route minimal(points);
-	int subgroup_maxsize = 0;
-	int prevsubgroup_maxsize = 0;
+
 	do {
 		// Check if the current permutation of numbers is valid for the subgroup indices
 		bool valid = true;
+		int subgroup_maxsize = 0;
+		int prevsubgroup_maxsize = 0;
 		for (size_t i = 0; i < subgroup_indices.size(); i++)
 		{
 			subgroup_maxsize += subgroup_indices[i];
@@ -107,6 +108,7 @@ int main()
 			std::string json_str = json.str();
 			file << json_str;
 		}
+	/*
 	{
 		const std::string fileName = "out/output" + std::to_string(targets) + ".json";
 
@@ -124,7 +126,7 @@ int main()
 			}
 			Timer timer;
 			timer.start();
-			auto optimal = brute_force_advanced_planning(points, );
+			auto optimal = brute_force_advanced_planning(points, subgroup_indices);
 			timer.stop();
 			std::cout << std::setw(5) << j + 1 << " | " << std::setw(14) << timer << " | " << std::fixed << std::setprecision(6) << optimal.route_cost() << " | " << optimal.print() << std::endl;
 			json << optimal.printJSON();
@@ -135,6 +137,7 @@ int main()
 		std::string json_str = json.str();
 		file << json_str;
 	}
+	*/
 }
 return 0;
 }
