@@ -3,6 +3,7 @@
 #include <numbers>
 #include <cmath>
 #include <sstream>
+#include "Timer.h"
 #include "Azel.h"
 
 class Route {
@@ -34,7 +35,7 @@ public:
 		}
 		return out.str();
 	}
-	std::string printJSON() const
+	std::string printJSON(const Timer& timer) const
 	{
 		std::stringstream out;
 		out << "\t{\n\t\t\"points\": [\n";
@@ -43,7 +44,7 @@ public:
 			out << "\t\t\t[\n\t\t\t\t" << p.az_deg << ",\n\t\t\t\t" << p.el_deg << "\n\t\t\t],\n";
 		}
 		out.seekp(-2, std::ios_base::end);
-		out << "\n\t\t],\n\t\t\"cost\": " << cost << "\n\t},\n";
+		out << "\n\t\t],\n\t\t\"cost\": " << cost << ",\n\t\t\"time\": " << timer << "\n\t},\n";
 		return out.str();
 	}
 private:

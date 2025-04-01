@@ -30,4 +30,96 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="out\output4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output4_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output4_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output4_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output5.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output5_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output5_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output5_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output6.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output6_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output6_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output6_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output7.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output7_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output7_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output7_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output8.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output8_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output8_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output8_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output9.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output9_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output9_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output9_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output10.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output10_2.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output10_3.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output10_4.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output11.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="out\output12.json">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+  </ItemGroup>
 </Project>

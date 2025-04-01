@@ -15,6 +15,25 @@ struct Azel {
 		if (az_deg == other.az_deg) return el_deg < other.el_deg;
 		return az_deg < other.az_deg;
 	}
+	bool operator>(const Azel& other)
+	{
+		if (az_deg == other.az_deg) return el_deg > other.el_deg;
+		return az_deg > other.az_deg;
+	}
+	bool operator<=(const Azel& other)
+	{
+		if (az_deg == other.az_deg) return el_deg <= other.el_deg;
+		return az_deg <= other.az_deg;
+	}
+	bool operator>=(const Azel& other)
+	{
+		if (az_deg == other.az_deg) return el_deg >= other.el_deg;
+		return az_deg >= other.az_deg;
+	}
+	bool operator==(const Azel& other)
+	{
+		return (az_deg == other.az_deg) and (el_deg == other.el_deg);
+	}
 	std::string print() const
 	{
 		std::stringstream out;
