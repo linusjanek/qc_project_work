@@ -24,3 +24,12 @@ def route_cost(route: list[list[int]]) -> float:
         next_azel = route[(i + 1) % n] # Wrap around to the start of the route
         total_cost += cost_function(current_azel, next_azel)
     return total_cost
+
+def route_cost_not_wrapped(route: list[list[int]]) -> float:
+    total_cost = 0
+    n = len(route)
+    for i in range(n-1):
+        current_azel = route[i]
+        next_azel = route[(i + 1) % n] # Wrap around to the start of the route
+        total_cost += cost_function(current_azel, next_azel)
+    return total_cost
