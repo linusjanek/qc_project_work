@@ -75,6 +75,8 @@ for num_iterations in [20, 40, 80, 100, 150, 200, 1000]:
                     str += "correct!"
                 else:
                     str += "failed!"
+                    if cq < cb:
+                        str += " BETTER QUANTUM SOLUTION"
                 print(str)
 
                 # Write points, rq and cq to json file
