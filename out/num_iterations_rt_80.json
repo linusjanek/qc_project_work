@@ -1,0 +1,16 @@
+[
+    {
+        "id": "4.0",
+        "num_iterations": 80,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.0854864501953125
+    },
+    {
+        "id": "5.0",
+        "num_iterations": 80,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.16744486331939698
+    }
+]
