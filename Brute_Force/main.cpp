@@ -37,7 +37,7 @@ Route brute_force_advanced_planning(std::vector<Azel> points, std::vector<int> s
 			subgroup_maxsize += subgroup_indices[i];
 			for (size_t j = prevsubgroup_maxsize; j < subgroup_maxsize; j++)
 			{
-				if (numbers[j] > subgroup_maxsize){
+				if (numbers[j] > subgroup_maxsize-1){
 					valid = false;
 					break;
 				}
