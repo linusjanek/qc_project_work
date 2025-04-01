@@ -35,6 +35,8 @@ def route_cost_not_wrapped(route: list[list[int]]) -> float:
     return total_cost
 
 def generate_subgroup_indices(targets: int, subgroup_size: int) -> list[int]:
+    if subgroup_size <= 0:
+        return []
     subgroup_indices = []
     subgroup_rest = targets % subgroup_size
     subgroup_count = targets // subgroup_size

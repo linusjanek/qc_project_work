@@ -298,8 +298,8 @@ def quantum_linus(azel: list[list[int]], subgroup_indices = [], num_reads = 5000
     sampler = SimulatedAnnealingSampler()
     sampleset = sampler.sample_qubo(coeff, num_reads=num_reads).aggregate().to_pandas_dataframe()
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    sampleset.to_csv(f'./out/pandasframe_{len(azel)}_{len(subgroup_indices)}_{timestamp}.csv', index=False)
+    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # sampleset.to_csv(f'./out/pandasframe_{len(azel)}_{len(subgroup_indices)}_{timestamp}.csv', index=False)
 
     min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
     v = verify_constraints_linus(min.iloc[0])
