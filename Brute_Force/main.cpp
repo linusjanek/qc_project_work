@@ -47,11 +47,14 @@ Route brute_force_advanced_planning(std::vector<Azel> points, std::vector<int> s
 		}
 
 		if(valid){
-			Route next(points);
+			std::vector<Azel> next_points;
+			for (size_t i = 0; i < numbers.size(); i++) {
+				next_points.emplace_back(points[numbers[i]]);
+			}
+			Route next(next_points);
 			if (next.route_cost() < minimal.route_cost()) minimal = next;
 		}
-	} while (std::next_permutation(points.begin(), points.end())
-		&& std::next_permutation(numbers.begin(), numbers.end()));
+	} while (std::next_permutation(numbers.begin(), numbers.end()));
 	return minimal;
 
 }
@@ -64,10 +67,10 @@ int main()
 	std::uniform_real_distribution<> elevations(-90, 90);
 
 	const size_t attempts = 10;
-	const size_t max_targets = 16;
+	const size_t max_targets = 10;
 	const size_t max_subgroup_size = 4;
 
-	for (size_t targets = 8; targets < max_targets + 1; targets++){
+	for (size_t targets = 4; targets < max_targets + 1; targets++){
 		for (size_t subgroup_size = 2;subgroup_size <= max_subgroup_size; subgroup_size++){
 			
 			const std::string fileName = "out/output" + std::to_string(targets) + "_" + std::to_string(subgroup_size) + ".json";

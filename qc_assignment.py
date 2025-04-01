@@ -9,7 +9,7 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 # Define the output file path
 file_path = f'./out/data_{timestamp}.json'
 
-for targets in range(8, 16):#
+for targets in range(4, 11):#
     for subgroup_size in range(2, 5): 
         # Load targets from C++ JSON output
         input_data = {}
