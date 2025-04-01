@@ -33,3 +33,13 @@ def route_cost_not_wrapped(route: list[list[int]]) -> float:
         next_azel = route[(i + 1) % n] # Wrap around to the start of the route
         total_cost += cost_function(current_azel, next_azel)
     return total_cost
+
+def generate_subgroup_indices(targets: int, subgroup_size: int) -> list[int]:
+    subgroup_indices = []
+    subgroup_rest = targets % subgroup_size
+    subgroup_count = targets // subgroup_size
+    for i in range(subgroup_count):
+        subgroup_indices.append(subgroup_size)
+    if subgroup_rest > 0:
+        subgroup_indices.append(subgroup_rest)
+    return subgroup_indices

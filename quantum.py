@@ -184,8 +184,8 @@ def qubo_linus(azel: list[list[int]], subgroup_indices: list[int] = [], function
     this_index = 0
     for i in range(len(subgroup_indices)):
         next_index = this_index + subgroup_indices[i]
-        print(this_index)
-        print(next_index)
+        #print(this_index)
+        #print(next_index)
         for v in range(this_index, next_index):
             for j in range(n):
                 if j < this_index or j >= next_index:
