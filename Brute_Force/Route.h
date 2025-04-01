@@ -22,7 +22,7 @@ public:
 	{
 		return 0.1 * std::acos(std::sin(start.el_rad) * std::sin(end.el_rad) + std::cos(start.el_rad) * std::cos(end.el_rad) * std::cos(end.az_rad - start.az_rad)) / std::numbers::pi;
 	}
-	double route_cost()
+	double route_cost() const
 	{
 		return cost;
 	}

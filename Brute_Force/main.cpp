@@ -13,6 +13,7 @@
 
 Route brute_force(std::vector<Azel> points)
 {
+	std::sort(points.begin(), points.end());
 	Route minimal(points);
 	do {
 		Route next(points);
@@ -47,8 +48,8 @@ void EvaluateBruteForce()
 	std::uniform_real_distribution<> azimuths(0, 360);
 	std::uniform_real_distribution<> elevations(-90, 90);
 
-	const size_t attempts = 100;
-	const size_t max_targets = 12;
+	const size_t attempts = 50;
+	const size_t max_targets = 11;
 
 	for (size_t targets = 4; targets < max_targets + 1; targets++)
 	{
@@ -88,12 +89,12 @@ void EvaluateBruteForceAdvanced()
 	std::uniform_real_distribution<> azimuths(0, 360);
 	std::uniform_real_distribution<> elevations(-90, 90);
 
-	const size_t attempts = 100;
+	const size_t attempts = 50;
 	const size_t max_targets = 11;
-	const size_t max_subgroup_size = 10;
+	const size_t max_subgroup_size = 11;
 
 	for (size_t targets = 4; targets < max_targets + 1; targets++) {
-		for (size_t subgroup_size = 2; subgroup_size <= max_subgroup_size && subgroup_size <= targets; subgroup_size++) {
+		for (size_t subgroup_size = 2; subgroup_size <= max_subgroup_size && subgroup_size <= targets - 1; subgroup_size++) {
 
 			const std::string fileName = "out/output" + std::to_string(targets) + "_" + std::to_string(subgroup_size) + ".json";
 
@@ -122,6 +123,7 @@ void EvaluateBruteForceAdvanced()
 				}
 				Timer timer;
 				timer.start();
+				std::sort(points.begin(), points.end());
 				auto optimal = brute_force_advanced_planning(points, subgroup_indices);
 				timer.stop();
 				std::cout << std::setw(5) << j + 1 << " | " << std::setw(14) << timer << " | " << std::fixed << std::setprecision(6) << optimal.route_cost() << " | " << optimal.print() << std::endl;
@@ -138,6 +140,7 @@ void EvaluateBruteForceAdvanced()
 
 int main()
 {
+	EvaluateBruteForce();
 	EvaluateBruteForceAdvanced();
 	return 0;
 }
