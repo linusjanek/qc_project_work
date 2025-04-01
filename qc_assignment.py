@@ -3,13 +3,14 @@ from brute_force import brute_force
 from quantum import quantum, quantum_linus, basin_hopping_tsp
 import json
 from datetime import datetime
+from time import time  # Import time module for runtime measurement
 
 # Get the current timestamp
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 # Define the output file path
 file_path = f'./out/data_{timestamp}.json'
 
-for targets in range(4, 11):#
+for targets in range(4, 11):
     for subgroup_size in range(2, 5): 
         # Load targets from C++ JSON output
         input_data = {}
@@ -26,7 +27,14 @@ for targets in range(4, 11):#
             cb = input_data[i]["cost"]
             
             subgroup_indices = generate_subgroup_indices(targets, subgroup_size)
+
+
+            start_time = time()  # Start the timer
             rq, cq = quantum_linus(points, subgroup_indices=subgroup_indices)
+            end_time = time()  # End the timer
+
+            runtime = end_time - start_time  # Calculate runtime
+            print(f"Runtime: {runtime:.4f} seconds")  # Print runtime
             print(rq)
             str = f"Attempt {i+1}/{len(input_data)}: cb == {round(cb, 4)}, cq == {round(cq, 4)} -> "
             if abs(cb-cq) < 0.0001:
@@ -42,6 +50,9 @@ for targets in range(4, 11):#
             new_data['points'] = points
             new_data['rq'] = rq
             new_data['cq'] = cq
+
+            # Add runtime to json
+            new_data['runtime'] = runtime
             try:
                 # Read the existing JSON data
                 with open(file_path, 'r') as file:

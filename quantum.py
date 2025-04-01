@@ -5,6 +5,7 @@ from sympy import lambdify
 from scipy.optimize import basinhopping
 from dwave.samplers import SimulatedAnnealingSampler
 import pandas as pd
+from datetime import datetime
 
 def cost_matrix(azel: list[list[int]]):
     m = np.zeros(shape=(len(azel), len(azel)))
@@ -292,10 +293,14 @@ def verify_constraints_linus(series: pd.Series) -> bool:
         return indeces
     return False
 
-def quantum_linus(azel: list[list[int]], subgroup_indices) -> list[int]:
+def quantum_linus(azel: list[list[int]], subgroup_indices = [], num_reads = 50000) -> list[int]:
     coeff = qubo_linus(azel, subgroup_indices)
     sampler = SimulatedAnnealingSampler()
-    sampleset = sampler.sample_qubo(coeff, num_reads=50000).aggregate().to_pandas_dataframe()
+    sampleset = sampler.sample_qubo(coeff, num_reads=num_reads).aggregate().to_pandas_dataframe()
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    sampleset.to_csv(f'./out/pandasframe_{len(azel)}_{len(subgroup_indices)}_{timestamp}.csv', index=False)
+
     min = sampleset[sampleset["energy"] == sampleset["energy"].min()]
     v = verify_constraints_linus(min.iloc[0])
     if v != False:
