@@ -1,0 +1,37 @@
+[
+    {
+        "id": "6.2",
+        "num_iterations": 100,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.23504022121429444
+    },
+    {
+        "id": "6.3",
+        "num_iterations": 100,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.23113900661468506
+    },
+    {
+        "id": "6.4",
+        "num_iterations": 100,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.23656781196594237
+    },
+    {
+        "id": "6.5",
+        "num_iterations": 100,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.24187639236450195
+    },
+    {
+        "id": "6.6",
+        "num_iterations": 100,
+        "correct": 50,
+        "total": 50,
+        "average_runtime": 0.261455135345459
+    }
+]

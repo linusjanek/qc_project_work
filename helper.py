@@ -6,16 +6,21 @@ VectorFloat = (float, float, float)
 QuantumState = (complex, complex)
 
 # return the rotation angle
-def cost_function(start_azel: AzEl, end_azel: AzEl) -> float:
-    return np.arccos(np.sin(start_azel[1]) * np.sin(end_azel[1]) + np.cos(start_azel[1]) * np.cos(end_azel[1]) * np.cos(end_azel[0] - start_azel[0]))
+
+def cost_function(start_azel_deg, end_azel_deg) -> float:
+    # convert to radians
+    start_azel = [deg * np.pi / 180 for deg in start_azel_deg]
+    end_azel = [deg * np.pi / 180 for deg in end_azel_deg]
+    return 0.1*np.arccos(np.sin(start_azel[1]) * np.sin(end_azel[1]) + np.cos(start_azel[1]) * np.cos(end_azel[1]) * np.cos(end_azel[0] - start_azel[0]))/np.pi
 
 def vector_from_azel(azel: AzEl) -> VectorFloat:
     return [np.sin(azel[0]) * np.cos(azel[1]), np.cos(azel[0]) * np.cos(azel[1]), np.sin(azel[1])]
 
-def rnd_points(n: int) -> list[AzEl]:
-    return [[random.uniform(0, 2*np.pi), random.uniform(0, np.pi)] for i in range(n)]
+def rnd_points(n: int) -> list[list[int]]:
+    return [[random.randint(0, 360), random.randint(-90, 90)] for i in range(n)]
 
-def route_cost(route: list[AzEl]) -> float:
+def route_cost(route: list[list[int]]) -> float:
+
     total_cost = 0
     n = len(route)
     for i in range(n):
@@ -24,7 +29,23 @@ def route_cost(route: list[AzEl]) -> float:
         total_cost += cost_function(current_azel, next_azel)
     return total_cost
 
-def angle_to_bloch(phi: float, theta: float) -> QuantumState:
-    zero_factor = np.cos(theta/2)
-    one_factor = np.exp(1j * phi/2) * np.sin(theta/2)
-    return (zero_factor, one_factor)
+def route_cost_not_wrapped(route: list[list[int]]) -> float:
+    total_cost = 0
+    n = len(route)
+    for i in range(n-1):
+        current_azel = route[i]
+        next_azel = route[(i + 1) % n] # Wrap around to the start of the route
+        total_cost += cost_function(current_azel, next_azel)
+    return total_cost
+
+def generate_subgroup_indices(targets: int, subgroup_size: int) -> list[int]:
+    if subgroup_size <= 0:
+        return []
+    subgroup_indices = []
+    subgroup_rest = targets % subgroup_size
+    subgroup_count = targets // subgroup_size
+    for i in range(subgroup_count):
+        subgroup_indices.append(subgroup_size)
+    if subgroup_rest > 0:
+        subgroup_indices.append(subgroup_rest)
+    return subgroup_indices
