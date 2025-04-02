@@ -32,11 +32,11 @@ while correct:
 num_iterations = num_iterations * 2'
 '''
 better_qt_solution_counter = 0
-for num_iterations in [80, 150, 200, 500, 1000, 2000, 5000, 10000]:
-    iterator_path = f'./out/num_iterations_rt_{num_iterations}.json'
+for num_iterations in [100]:
+    iterator_path = f'./out/num_iterations_subgroups_{num_iterations}.json'
     iterator_data = []
-    for targets in range(4, 12):
-        for subgroup_size in range(1):
+    for targets in range(6, 7):
+        for subgroup_size in range(2, 7):
         # for subgroup_size in range(2, 5):
             # Load targets from C++ JSON output
             input_data = {}
