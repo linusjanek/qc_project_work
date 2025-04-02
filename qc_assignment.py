@@ -31,6 +31,7 @@ while correct:
         correct = False
 num_iterations = num_iterations * 2'
 '''
+better_qt_solution_counter = 0
 for num_iterations in [80, 150, 200, 500, 1000, 2000, 5000, 10000]:
     iterator_path = f'./out/num_iterations_rt_{num_iterations}.json'
     iterator_data = []
@@ -76,6 +77,7 @@ for num_iterations in [80, 150, 200, 500, 1000, 2000, 5000, 10000]:
                     str += "failed!"
                     if cq < cb:
                         str += " BETTER QUANTUM SOLUTION"
+                        better_qt_solution_counter += 1
                 print(str)
 
                 # Write points, rq and cq to json file
@@ -113,3 +115,5 @@ for num_iterations in [80, 150, 200, 500, 1000, 2000, 5000, 10000]:
             iterator_data.append(new_data)   
             with open(iterator_path, 'w') as file:
                 json.dump(iterator_data, file, indent=4)
+
+print(f"Quantum annealing found {better_qt_solution_counter} better solutions than brute force.")
